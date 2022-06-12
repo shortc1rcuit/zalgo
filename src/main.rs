@@ -9,10 +9,13 @@ fn main() {
                           '̅', '̊', '̐',          //Push Z
                           '̝', '̝', '̝', '̝', '̝']; //Print 5 chars
 
-    interpret_code(lexed_code);
+    if let Err(e) = interpret_code(lexed_code) {
+        eprintln!("Runtime error! {}", e);
+        process::exit(1);
+    }
 }
 
-fn interpret_code(code: Vec<char>) {
+fn interpret_code(code: Vec<char>) -> Result<(), &'static str>{
     let mut stack: Vec<u32> = Vec::new();
 
     //Value used to build a number before it's pushed to the stack
@@ -37,16 +40,14 @@ fn interpret_code(code: Vec<char>) {
             let print_char = match stack.pop() {
                 Some(x) => x,
                 None => {
-                    eprintln!("Out of stack values!");
-                    process::exit(1);
+                    return Err("Out of stack values!");
                 }
             };
 
             let print_char = match char::from_u32(print_char){
                 Some(x) => x,
                 None => {
-                    eprintln!("Invalid char value!");
-                    process::exit(1);
+                    return Err("Invalid char value!");
                 }
             };
 
@@ -56,4 +57,6 @@ fn interpret_code(code: Vec<char>) {
     }
 
     println!("{}", result);
+
+    Ok(())
 }

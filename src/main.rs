@@ -1,7 +1,8 @@
 use std::process;
 
-pub mod cluster;
-use cluster::Cluster;
+pub mod lexer;
+use lexer::*;
+use cluster::*;
 
 fn main() {
     //Only the diacritics needed to print "Zalgo"
@@ -14,7 +15,7 @@ fn main() {
 
     //Converts the characters to numbers to:
     //A) Make characters easier to write in the program
-    //B) Make 0-F digits easier to use
+//B) Make 0-F digits easier to use
     let unclustered = unclustered.into_iter()
                                  .map(|x| (x as u32) - 0x300)
                                  .collect();

@@ -40,3 +40,11 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | Character | Unicode Number    | Description                                             |
 |:---------:|:-----------------:|---------------------------------------------------------|
 | `◌̝`       | `U+031D`          | Pops a value of the stack and prints it's Unicode value |
+
+## Running the interpreter
+
+[Install rust](https://www.rust-lang.org/tools/install) if it isn't on your system.
+
+```console
+$ cargo run [filename]
+```

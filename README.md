@@ -32,14 +32,15 @@ Clusters are executed in reading order.
 |:---------:|:-----------------:|-----------------------------------|
 | `◌̀ - ◌̏`   | `U+0300 - U+030F` | Represents the hex digits `0 - F` |
 | `◌̐`       | `U+0310`          | Pushes the hex value to the stack |
+| `◌̑`       | `U+0311`          | Pops the top value off the stack  |
 
 The interpreter treats hex digits that are next to each other as one single hex number.
 
 ### Bottom side instructions
 
-| Character | Unicode Number    | Description                                             |
-|:---------:|:-----------------:|---------------------------------------------------------|
-| `◌̝`       | `U+031D`          | Pops a value of the stack and prints it's Unicode value |
+| Character | Unicode Number    | Description                                              |
+|:---------:|:-----------------:|----------------------------------------------------------|
+| `◌̝`       | `U+031D`          | Pops a value off the stack and prints it's Unicode value |
 
 ## Running the interpreter
 

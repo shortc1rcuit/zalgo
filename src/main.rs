@@ -57,6 +57,9 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 //Push to stack
                 stack.push(pre_push);
                 pre_push = 0;
+            } else if value == 0x11 {
+                //Pop top of stack
+                stack.pop();
             }
         }
         for value in cluster.bottom {

@@ -3,8 +3,8 @@ use itertools::Itertools;
 pub mod cluster;
 use cluster::*;
 
-pub fn lex_text(base_code: &str) -> Result<Vec<Cluster>, &'static str> {
-    let base_code = strip_whitespace(base_code);
+pub fn lex_text(base_code: String) -> Result<Vec<Cluster>, &'static str> {
+    let base_code = strip_whitespace(&base_code);
 
     let cluster_starts = get_centre_chars_loc(&base_code);
     if cluster_starts.is_empty() {

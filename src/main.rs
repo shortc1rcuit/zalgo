@@ -67,25 +67,17 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
             }
         }
         for value in &lexed_code[x].bottom {
+            //Pop the top of the stack
+            //If 0, skip the next cluster
             if *value == 0x1C {
-                let if_check = match stack.pop() {
-                    Some(x) => x,
-                    None => {
-                        return Err("Out of stack values!");
-                    }
-                };
+                let if_check = pop_stack(&mut stack)?;
 
                 if if_check == 0 {
                     x += 1;
                 }
             } else if *value == 0x1D {
                 //Pop top of stack and print
-                let print_char = match stack.pop() {
-                    Some(x) => x,
-                    None => {
-                        return Err("Out of stack values!");
-                    }
-                };
+                let print_char = pop_stack(&mut stack)?;
 
                 let print_char = match char::from_u32(print_char) {
                     Some(x) => x,
@@ -96,12 +88,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
                 result = format!("{}{}", result, print_char);
             } else if *value == 0x48 {
-                let single = match stack.pop() {
-                    Some(x) => x,
-                    None => {
-                        return Err("Out of stack values!");
-                    }
-                };
+                let single = pop_stack(&mut stack)?;
 
                 stack.push(single);
                 stack.push(single);
@@ -114,4 +101,13 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
     println!("{}", result);
 
     Ok(())
+}
+
+fn pop_stack(stack: &mut Vec<u32>) -> Result<u32, &'static str> {
+    match stack.pop() {
+        Some(x) => Ok(x),
+        None => {
+            return Err("Out of stack values!");
+        }
+    }
 }

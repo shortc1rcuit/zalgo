@@ -41,7 +41,8 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | Character | Unicode Number    | Description                                                  |
 |:---------:|:-----------------:|--------------------------------------------------------------|
 | `◌̜`       | `U+031C`          | Pops a value off the stack, if it's 0, skip the next cluster |
-| `◌̝`       | `U+031D`          | Pops a value off the stack and prints it's Unicode value     |
+| `◌̝`       | `U+031D`          | Pops a value off the stack and prints its Unicode value      |
+| `◌͈`       | `U+0348`          | Duplicates the top value of the stack                        |
 
 ## Running the interpreter
 

@@ -95,6 +95,16 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 };
 
                 result = format!("{}{}", result, print_char);
+            } else if *value == 0x48 {
+                let single = match stack.pop() {
+                    Some(x) => x,
+                    None => {
+                        return Err("Out of stack values!");
+                    }
+                };
+
+                stack.push(single);
+                stack.push(single);
             }
         }
 

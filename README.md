@@ -38,9 +38,10 @@ The interpreter treats hex digits that are next to each other as one single hex 
 
 ### Bottom side instructions
 
-| Character | Unicode Number    | Description                                              |
-|:---------:|:-----------------:|----------------------------------------------------------|
-| `◌̝`       | `U+031D`          | Pops a value off the stack and prints it's Unicode value |
+| Character | Unicode Number    | Description                                                  |
+|:---------:|:-----------------:|--------------------------------------------------------------|
+| `◌̜`       | `U+031C`          | Pops a value off the stack, if it's 0, skip the next cluster |
+| `◌̝`       | `U+031D`          | Pops a value off the stack and prints it's Unicode value     |
 
 ## Running the interpreter
 

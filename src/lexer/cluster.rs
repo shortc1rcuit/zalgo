@@ -1,6 +1,6 @@
 const TOP_SET: [u32; 18] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 
-const BOTTOM_SET: [u32; 1] = [0x1D];
+const BOTTOM_SET: [u32; 2] = [0x1C, 0x1D];
 
 #[derive(Debug, PartialEq)]
 pub struct Cluster {

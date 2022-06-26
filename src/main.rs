@@ -48,22 +48,37 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
     let mut result = String::new();
 
-    for cluster in lexed_code {
-        for value in cluster.top {
-            if value <= 0xF {
+    //Index into vec
+    //I need to jump back and forth in the vec so I can't just iter
+    let mut x = 0;
+
+    while x < lexed_code.len() {
+        for value in &lexed_code[x].top {
+            if *value <= 0xF {
                 //0-F value
                 pre_push = (pre_push << 4) + value;
-            } else if value == 0x10 {
+            } else if *value == 0x10 {
                 //Push to stack
                 stack.push(pre_push);
                 pre_push = 0;
-            } else if value == 0x11 {
+            } else if *value == 0x11 {
                 //Pop top of stack
                 stack.pop();
             }
         }
-        for value in cluster.bottom {
-            if value == 0x1D {
+        for value in &lexed_code[x].bottom {
+            if *value == 0x1C {
+                let if_check = match stack.pop() {
+                    Some(x) => x,
+                    None => {
+                        return Err("Out of stack values!");
+                    }
+                };
+
+                if if_check == 0 {
+                    x += 1;
+                }
+            } else if *value == 0x1D {
                 //Pop top of stack and print
                 let print_char = match stack.pop() {
                     Some(x) => x,
@@ -82,6 +97,8 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 result = format!("{}{}", result, print_char);
             }
         }
+
+        x += 1;
     }
 
     println!("{}", result);

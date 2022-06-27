@@ -42,7 +42,7 @@ fn get_filename(mut args: env::Args) -> Result<String, &'static str> {
 }
 
 fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
-    let mut stack: Vec<u32> = Vec::new();
+    let mut stack: Vec<i32> = Vec::new();
 
     //Value used to build a number before it's pushed to the stack
     let mut pre_push = 0;
@@ -57,8 +57,8 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
         for value in &lexed_code[x].top {
             match *value {
                 //0 - F value
-                TopSet::Number(x) => {
-                    pre_push = (pre_push << 4) + x;
+                TopSet::Number(a) => {
+                    pre_push = (pre_push << 4) + a;
                 }
                 //Push to stack
                 TopSet::Push => {
@@ -86,7 +86,11 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     //Pop top of stack and print
                     let print_char = pop_stack(&mut stack)?;
 
-                    let print_char = match char::from_u32(print_char) {
+                    if print_char < 0 {
+                        return Err("Invalid char value!");
+                    }
+
+                    let print_char = match char::from_u32(print_char as u32) {
                         Some(x) => x,
                         None => {
                             return Err("Invalid char value!");
@@ -102,6 +106,36 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     stack.push(single);
                     stack.push(single);
                 }
+                BottomSet::Add => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(a + b);
+                }
+                BottomSet::Sub => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b - a);
+                }
+                BottomSet::Mul => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(a * b);
+                }
+                BottomSet::Div => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b / a);
+                }
+                BottomSet::Mod => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b % a);
+                }
             }
         }
 
@@ -113,7 +147,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
     Ok(())
 }
 
-fn pop_stack(stack: &mut Vec<u32>) -> Result<u32, &'static str> {
+fn pop_stack(stack: &mut Vec<i32>) -> Result<i32, &'static str> {
     match stack.pop() {
         Some(x) => Ok(x),
         None => Err("Out of stack values!"),

@@ -1,6 +1,6 @@
 #[derive(Debug, PartialEq)]
 pub enum TopSet {
-    Number(u32),
+    Number(i32),
     Push,
     Pop,
 }
@@ -10,4 +10,9 @@ pub enum BottomSet {
     If,
     Print,
     Dup,
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Mod,
 }

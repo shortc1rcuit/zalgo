@@ -38,11 +38,16 @@ The interpreter treats hex digits that are next to each other as one single hex 
 
 ### Bottom side instructions
 
-| Character | Unicode Number    | Description                                                  |
-|:---------:|:-----------------:|--------------------------------------------------------------|
-| `◌̜`       | `U+031C`          | Pops a value off the stack, if it's 0, skip the next cluster |
-| `◌̝`       | `U+031D`          | Pops a value off the stack and prints its Unicode value      |
-| `◌͈`       | `U+0348`          | Duplicates the top value of the stack                        |
+| Character | Unicode Number    | Description                                                         |
+|:---------:|:-----------------:|---------------------------------------------------------------------|
+| `◌̜`       | `U+031C`          | Pops a value off the stack, if it's 0, skip the next cluster        |
+| `◌̝`       | `U+031D`          | Pops a value off the stack and prints its Unicode value             |
+| `◌͈`       | `U+0348`          | Duplicates the top value of the stack                               |
+| `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y, push X+Y                |
+| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push Y-X                |
+| `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y, push X*Y                |
+| `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y/X (rounded down) |
+| `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y%X                |
 
 ## Running the interpreter
 

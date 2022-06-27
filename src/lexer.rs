@@ -1,6 +1,5 @@
 pub mod cluster;
 use cluster::*;
-use token::*;
 
 pub fn lex_text(base_code: String) -> Result<Vec<Cluster>, &'static str> {
     let base_code = strip_whitespace(&base_code);
@@ -76,6 +75,7 @@ fn text_to_cluster(unclustered: Vec<String>) -> Vec<Cluster> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use token::*;
 
     #[test]
     fn strip_whitespace_test() {

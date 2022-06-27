@@ -1,7 +1,6 @@
-use itertools::Itertools;
-
 pub mod cluster;
 use cluster::*;
+use token::*;
 
 pub fn lex_text(base_code: String) -> Result<Vec<Cluster>, &'static str> {
     let base_code = strip_whitespace(&base_code);
@@ -32,6 +31,8 @@ fn get_centre_chars_loc(base_code: &str) -> Vec<usize> {
 }
 
 fn pair(unpaired: Vec<usize>) -> Vec<(usize, Option<usize>)> {
+    use itertools::Itertools;
+
     let mut paired = Vec::new();
     //Unwrap is fine as I've checked that unpaired has at least one value in it
     let last = *unpaired.last().unwrap();
@@ -139,12 +140,12 @@ mod tests {
         ];
         let clustered = vec![
             Cluster {
-                top: vec![6, 0xF, 0x10],
+                top: vec![TopSet::Number(6), TopSet::Number(15), TopSet::Push],
                 bottom: vec![],
             },
             Cluster {
                 top: vec![],
-                bottom: vec![0x1D],
+                bottom: vec![BottomSet::Print],
             },
         ];
 

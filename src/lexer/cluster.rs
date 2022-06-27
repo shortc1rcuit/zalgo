@@ -1,11 +1,10 @@
-const TOP_SET: [u32; 18] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
-
-const BOTTOM_SET: [u32; 3] = [0x1C, 0x1D, 0x48];
+pub mod token;
+use token::*;
 
 #[derive(Debug, PartialEq)]
 pub struct Cluster {
-    pub top: Vec<u32>,
-    pub bottom: Vec<u32>,
+    pub top: Vec<TopSet>,
+    pub bottom: Vec<BottomSet>,
 }
 
 impl Cluster {
@@ -14,10 +13,18 @@ impl Cluster {
         let mut bottom = Vec::new();
 
         for c in unclustered {
-            if TOP_SET.contains(&c) {
-                top.push(c);
-            } else if BOTTOM_SET.contains(&c) {
-                bottom.push(c);
+            if c <= 0xF {
+                top.push(TopSet::Number(c));
+            } else if c == 0x10 {
+                top.push(TopSet::Push);
+            } else if c == 0x11 {
+                top.push(TopSet::Pop);
+            } else if c == 0x1C {
+                bottom.push(BottomSet::If);
+            } else if c == 0x1D {
+                bottom.push(BottomSet::Print);
+            } else if c == 0x48 {
+                bottom.push(BottomSet::Dup);
             }
         }
 
@@ -35,8 +42,13 @@ mod tests {
     fn new_cluster() {
         let unclustered = vec![0x1D, 15, 6, 0x1D, 7, 6];
         let clustered = Cluster {
-            top: vec![6, 7, 6, 15],
-            bottom: vec![0x1D, 0x1D],
+            top: vec![
+                TopSet::Number(6),
+                TopSet::Number(7),
+                TopSet::Number(6),
+                TopSet::Number(15),
+            ],
+            bottom: vec![BottomSet::Print, BottomSet::Print],
         };
 
         assert_eq!(Cluster::new(unclustered), clustered);

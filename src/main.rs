@@ -3,6 +3,7 @@ use std::{env, fs, process};
 pub mod lexer;
 use cluster::*;
 use lexer::*;
+use token::*;
 
 fn main() {
     let filename = get_filename(env::args()).unwrap_or_else(|err| {
@@ -54,44 +55,53 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
     while x < lexed_code.len() {
         for value in &lexed_code[x].top {
-            if *value <= 0xF {
-                //0-F value
-                pre_push = (pre_push << 4) + value;
-            } else if *value == 0x10 {
+            match *value {
+                //0 - F value
+                TopSet::Number(x) => {
+                    pre_push = (pre_push << 4) + x;
+                }
                 //Push to stack
-                stack.push(pre_push);
-                pre_push = 0;
-            } else if *value == 0x11 {
-                //Pop top of stack
-                stack.pop();
+                TopSet::Push => {
+                    stack.push(pre_push);
+                    pre_push = 0;
+                }
+                //Pop top off stack
+                TopSet::Pop => {
+                    stack.pop();
+                }
             }
         }
         for value in &lexed_code[x].bottom {
-            //Pop the top of the stack
-            //If 0, skip the next cluster
-            if *value == 0x1C {
-                let if_check = pop_stack(&mut stack)?;
+            match *value {
+                //Pop the top of the stack
+                //If 0, skip the next cluster
+                BottomSet::If => {
+                    let if_check = pop_stack(&mut stack)?;
 
-                if if_check == 0 {
-                    x += 1;
-                }
-            } else if *value == 0x1D {
-                //Pop top of stack and print
-                let print_char = pop_stack(&mut stack)?;
-
-                let print_char = match char::from_u32(print_char) {
-                    Some(x) => x,
-                    None => {
-                        return Err("Invalid char value!");
+                    if if_check == 0 {
+                        x += 1;
                     }
-                };
+                }
+                BottomSet::Print => {
+                    //Pop top of stack and print
+                    let print_char = pop_stack(&mut stack)?;
 
-                result = format!("{}{}", result, print_char);
-            } else if *value == 0x48 {
-                let single = pop_stack(&mut stack)?;
+                    let print_char = match char::from_u32(print_char) {
+                        Some(x) => x,
+                        None => {
+                            return Err("Invalid char value!");
+                        }
+                    };
 
-                stack.push(single);
-                stack.push(single);
+                    result = format!("{}{}", result, print_char);
+                }
+                BottomSet::Dup => {
+                    //Duplicate top value of stack
+                    let single = pop_stack(&mut stack)?;
+
+                    stack.push(single);
+                    stack.push(single);
+                }
             }
         }
 
@@ -106,8 +116,6 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 fn pop_stack(stack: &mut Vec<u32>) -> Result<u32, &'static str> {
     match stack.pop() {
         Some(x) => Ok(x),
-        None => {
-            return Err("Out of stack values!");
-        }
+        None => Err("Out of stack values!"),
     }
 }

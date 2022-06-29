@@ -9,6 +9,7 @@ pub enum TopSet {
 pub enum BottomSet {
     If,
     Print,
+    Input,
     Dup,
     Add,
     Sub,

@@ -1,4 +1,8 @@
-use std::{env, fs, process};
+use std::{
+    env, fs,
+    io::{self, Write},
+    process,
+};
 
 pub mod lexer;
 use cluster::*;
@@ -47,7 +51,8 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
     //Value used to build a number before it's pushed to the stack
     let mut pre_push = 0;
 
-    let mut result = String::new();
+    let mut to_print = String::new();
+    let mut input = String::new();
 
     //Index into vec
     //I need to jump back and forth in the vec so I can't just iter
@@ -97,7 +102,31 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                         }
                     };
 
-                    result = format!("{}{}", result, print_char);
+                    to_print = format!("{}{}", to_print, print_char);
+                }
+                BottomSet::Input => {
+                    if input.is_empty() {
+                        print!("{}", to_print);
+                        io::stdout().flush().expect("Failed to flush buffer");
+
+                        to_print = "".to_string();
+
+                        io::stdin()
+                            .read_line(&mut input)
+                            .expect("Failed to read line");
+
+                        //The input will have a newline at the end, so it's removed
+                        //A null byte is added to the end so that it is possible to tell when the
+                        //string ends
+                        input.pop();
+                        input = format!("{}{}", input, "\0")
+                    }
+
+                    let mut input_chars = input.chars();
+                    //This is ok as the previous if statement
+                    //makes sure the string has something in it
+                    stack.push(input_chars.next().unwrap() as i32);
+                    input = input_chars.collect();
                 }
                 BottomSet::Dup => {
                     //Duplicate top value of stack
@@ -142,7 +171,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
         x += 1;
     }
 
-    println!("{}", result);
+    println!("{}", to_print);
 
     Ok(())
 }

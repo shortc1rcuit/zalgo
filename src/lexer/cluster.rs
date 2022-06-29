@@ -23,6 +23,8 @@ impl Cluster {
                 bottom.push(BottomSet::If);
             } else if c == 0x1D {
                 bottom.push(BottomSet::Print);
+            } else if c == 0x1E {
+                bottom.push(BottomSet::Input);
             } else if c == 0x48 {
                 bottom.push(BottomSet::Dup);
             } else if c == 0x1F {

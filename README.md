@@ -42,6 +42,7 @@ The interpreter treats hex digits that are next to each other as one single hex 
 |:---------:|:-----------------:|---------------------------------------------------------------------|
 | `◌̜`       | `U+031C`          | Pops a value off the stack, if it's 0, skip the next cluster        |
 | `◌̝`       | `U+031D`          | Pops a value off the stack and prints its Unicode value             |
+| `◌̞`       | `U+031E`          | Input works with a buffer. The command takes the first character from the buffer and pushes it to the stack. If the buffer is empty, the user is prompted to input something to set the buffer to before the process continues. All inputs have a null byte added to the end. |
 | `◌͈`       | `U+0348`          | Duplicates the top value of the stack                               |
 | `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y, push X+Y                |
 | `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push Y-X                |

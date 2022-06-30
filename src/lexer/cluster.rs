@@ -27,6 +27,8 @@ impl Cluster {
                 bottom.push(BottomSet::Input);
             } else if c == 0x48 {
                 bottom.push(BottomSet::Dup);
+            } else if c == 0x4D {
+                bottom.push(BottomSet::Jump);
             } else if c == 0x1F {
                 bottom.push(BottomSet::Add);
             } else if c == 0x20 {

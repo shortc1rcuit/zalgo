@@ -51,14 +51,13 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
     //Value used to build a number before it's pushed to the stack
     let mut pre_push = 0;
 
-    let mut to_print = String::new();
     let mut input = String::new();
 
     //Index into vec
     //I need to jump back and forth in the vec so I can't just iter
     let mut x = 0;
 
-    while x < lexed_code.len() {
+    'over_code: while x < lexed_code.len() {
         for value in &lexed_code[x].top {
             match *value {
                 //0 - F value
@@ -102,14 +101,11 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                         }
                     };
 
-                    to_print = format!("{}{}", to_print, print_char);
+                    print!("{}", print_char);
                 }
                 BottomSet::Input => {
                     if input.is_empty() {
-                        print!("{}", to_print);
                         io::stdout().flush().expect("Failed to flush buffer");
-
-                        to_print = "".to_string();
 
                         io::stdin()
                             .read_line(&mut input)
@@ -134,6 +130,12 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
                     stack.push(single);
                     stack.push(single);
+                }
+                BottomSet::Jump => {
+                    let position = pop_stack(&mut stack)?;
+
+                    x = position as usize;
+                    continue 'over_code;
                 }
                 BottomSet::Add => {
                     let a = pop_stack(&mut stack)?;
@@ -171,7 +173,8 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
         x += 1;
     }
 
-    println!("{}", to_print);
+    //This will add a % character to the end of the output if I don't do this
+    println!();
 
     Ok(())
 }

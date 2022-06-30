@@ -11,6 +11,7 @@ pub enum BottomSet {
     Print,
     Input,
     Dup,
+    Jump,
     Add,
     Sub,
     Mul,

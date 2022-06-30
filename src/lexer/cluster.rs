@@ -14,12 +14,12 @@ impl Cluster {
 
         for c in unclustered {
             if c <= 0xF {
-                top.push(TopSet::Number(c as i32));
+                top.push(TopSet::Number(c));
             } else if c == 0x10 {
                 top.push(TopSet::Push);
             } else if c == 0x11 {
                 top.push(TopSet::Pop);
-            } else if c == 0x1C {
+            } else if c == 0x25 {
                 bottom.push(BottomSet::If);
             } else if c == 0x1D {
                 bottom.push(BottomSet::Print);

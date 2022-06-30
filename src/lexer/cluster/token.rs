@@ -1,6 +1,6 @@
 #[derive(Debug, PartialEq)]
 pub enum TopSet {
-    Number(i32),
+    Number(u32),
     Push,
     Pop,
 }

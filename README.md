@@ -46,7 +46,7 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | `◌͈`       | `U+0348`          | Duplicates the top value of the stack.                               |
 | `◌͍`       | `U+034D`          | Pops a value off the stack and jumps to the nth cluster (0 indexed). Any remaining instructions in the current cluster will be ignored. |
 | `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y, push X+Y.                |
-| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push Y-X.                |
+| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push the absolute difference of X and Y. |
 | `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y, push X*Y.                |
 | `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y/X (rounded down). |
 | `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y%X.                |

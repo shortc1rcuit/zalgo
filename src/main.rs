@@ -46,7 +46,7 @@ fn get_filename(mut args: env::Args) -> Result<String, &'static str> {
 }
 
 fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
-    let mut stack: Vec<i32> = Vec::new();
+    let mut stack: Vec<u32> = Vec::new();
 
     //Value used to build a number before it's pushed to the stack
     let mut pre_push = 0;
@@ -90,10 +90,6 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     //Pop top of stack and print
                     let print_char = pop_stack(&mut stack)?;
 
-                    if print_char < 0 {
-                        return Err("Invalid char value!");
-                    }
-
                     let print_char = match char::from_u32(print_char as u32) {
                         Some(x) => x,
                         None => {
@@ -121,7 +117,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     let mut input_chars = input.chars();
                     //This is ok as the previous if statement
                     //makes sure the string has something in it
-                    stack.push(input_chars.next().unwrap() as i32);
+                    stack.push(input_chars.next().unwrap() as u32);
                     input = input_chars.collect();
                 }
                 BottomSet::Dup => {
@@ -147,7 +143,11 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     let a = pop_stack(&mut stack)?;
                     let b = pop_stack(&mut stack)?;
 
-                    stack.push(b - a);
+                    if a > b {
+                        stack.push(a - b);
+                    } else {
+                        stack.push(b - a);
+                    }
                 }
                 BottomSet::Mul => {
                     let a = pop_stack(&mut stack)?;
@@ -179,7 +179,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
     Ok(())
 }
 
-fn pop_stack(stack: &mut Vec<i32>) -> Result<i32, &'static str> {
+fn pop_stack(stack: &mut Vec<u32>) -> Result<u32, &'static str> {
     match stack.pop() {
         Some(x) => Ok(x),
         None => Err("Out of stack values!"),

@@ -167,6 +167,53 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
                     stack.push(b % a);
                 }
+                BottomSet::And => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b & a);
+                }
+                BottomSet::Or => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b | a);
+                }
+                BottomSet::Not => {
+                    //I only want to invert the necessary bits
+                    //e.g: inverting 18 should only invert the 5 end bits
+                    let mut a = pop_stack(&mut stack)?;
+
+                    let mut i = 1;
+                    let mut inv_a = 0;
+
+                    loop {
+                        if a % 2 == 0 {
+                            inv_a += i;
+                        }
+
+                        i = i << 1;
+                        a = a >> 1;
+
+                        if a == 0 {
+                            break;
+                        }
+                    }
+
+                    stack.push(inv_a);
+                }
+                BottomSet::Bsl => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b << a);
+                }
+                BottomSet::Bsr => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push(b >> a);
+                }
             }
         }
 

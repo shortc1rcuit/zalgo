@@ -50,7 +50,11 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y, push X*Y.                |
 | `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y/X (rounded down). |
 | `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y%X.                |
-
+| `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y, push X∧Y.                |
+| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push X∨Y.                |
+| `◌͓`       | `U+0353`          | Pops a value off the stack X and inverts the significant bits (NOT gate). |
+| `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y << X.             |
+| `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y >> X.             |
 
 ## Running the interpreter
 

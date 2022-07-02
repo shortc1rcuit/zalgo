@@ -39,6 +39,16 @@ impl Cluster {
                 bottom.push(BottomSet::Div);
             } else if c == 0x22 {
                 bottom.push(BottomSet::Mod);
+            } else if c == 0x2D {
+                bottom.push(BottomSet::And);
+            } else if c == 0x2C {
+                bottom.push(BottomSet::Or);
+            } else if c == 0x49 {
+                bottom.push(BottomSet::Not);
+            } else if c == 0x1C {
+                bottom.push(BottomSet::Bsl);
+            } else if c == 0x39 {
+                bottom.push(BottomSet::Bsr);
             }
         }
 

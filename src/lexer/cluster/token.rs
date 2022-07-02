@@ -17,4 +17,9 @@ pub enum BottomSet {
     Mul,
     Div,
     Mod,
+    And,
+    Or,
+    Not,
+    Bsl,
+    Bsr,
 }

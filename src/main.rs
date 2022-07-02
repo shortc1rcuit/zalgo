@@ -9,6 +9,9 @@ use cluster::*;
 use lexer::*;
 use token::*;
 
+pub mod helper;
+use helper::*;
+
 fn main() {
     let filename = get_filename(env::args()).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {}", err);
@@ -180,27 +183,9 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     stack.push(b | a);
                 }
                 BottomSet::Not => {
-                    //I only want to invert the necessary bits
-                    //e.g: inverting 18 should only invert the 5 end bits
-                    let mut a = pop_stack(&mut stack)?;
+                    let a = pop_stack(&mut stack)?;
 
-                    let mut i = 1;
-                    let mut inv_a = 0;
-
-                    loop {
-                        if a % 2 == 0 {
-                            inv_a += i;
-                        }
-
-                        i = i << 1;
-                        a = a >> 1;
-
-                        if a == 0 {
-                            break;
-                        }
-                    }
-
-                    stack.push(inv_a);
+                    stack.push(invert(a));
                 }
                 BottomSet::Bsl => {
                     let a = pop_stack(&mut stack)?;
@@ -224,11 +209,4 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
     println!();
 
     Ok(())
-}
-
-fn pop_stack(stack: &mut Vec<u32>) -> Result<u32, &'static str> {
-    match stack.pop() {
-        Some(x) => Ok(x),
-        None => Err("Out of stack values!"),
-    }
 }

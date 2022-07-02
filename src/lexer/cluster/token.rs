@@ -22,4 +22,7 @@ pub enum BottomSet {
     Not,
     Bsl,
     Bsr,
+    Equal,
+    Greater,
+    Less,
 }

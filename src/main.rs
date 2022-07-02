@@ -199,6 +199,42 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
                     stack.push(b >> a);
                 }
+                BottomSet::Equal => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push({
+                        if a == b {
+                            1
+                        } else {
+                            0
+                        }
+                    });
+                }
+                BottomSet::Greater => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push({
+                        if b > a {
+                            1
+                        } else {
+                            0
+                        }
+                    });
+                }
+                BottomSet::Less => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    stack.push({
+                        if b < a {
+                            1
+                        } else {
+                            0
+                        }
+                    });
+                }
             }
         }
 

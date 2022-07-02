@@ -49,6 +49,12 @@ impl Cluster {
                 bottom.push(BottomSet::Bsl);
             } else if c == 0x39 {
                 bottom.push(BottomSet::Bsr);
+            } else if c == 0x33 {
+                bottom.push(BottomSet::Equal);
+            } else if c == 0x55 {
+                bottom.push(BottomSet::Greater);
+            } else if c == 0x54 {
+                bottom.push(BottomSet::Less);
             }
         }
 

@@ -55,6 +55,9 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | `◌͓`       | `U+0353`          | Pops a value off the stack X and inverts the significant bits (NOT gate). |
 | `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y << X.             |
 | `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y >> X.             |
+| `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y. Push 1 if X == Y or 0 otherwise. |
+| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y. Push 1 if Y > X or 0 otherwise. |
+| `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y. Push 1 if Y < X or 0 otherwise. |
 
 ## Running the interpreter
 

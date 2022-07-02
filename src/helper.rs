@@ -5,7 +5,7 @@ pub fn pop_stack(stack: &mut Vec<u32>) -> Result<u32, &'static str> {
     }
 }
 
-pub fn invert(mut a: u32) -> u32{
+pub fn invert(mut a: u32) -> u32 {
     //I only want to invert the significant bits
     //e.g: inverting 18 should only invert the 5 end bits
     let mut i = 1;

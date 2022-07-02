@@ -235,6 +235,18 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                         }
                     });
                 }
+                BottomSet::CycleUp => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    cycle_up(&mut stack, b as usize, a)?;
+                }
+                BottomSet::CycleDown => {
+                    let a = pop_stack(&mut stack)?;
+                    let b = pop_stack(&mut stack)?;
+
+                    cycle_down(&mut stack, b as usize, a)?;
+                }
             }
         }
 

@@ -27,6 +27,30 @@ pub fn invert(mut a: u32) -> u32 {
     inv_a
 }
 
+pub fn cycle_up(stack: &mut Vec<u32>, size: usize, offset: u32) -> Result<(), &'static str> {
+    if size > stack.len() {
+        return Err("Given amount of elements to shift is larger than the stack");
+    }
+
+    let length = stack.len();
+
+    stack[(length - size)..].rotate_right(offset as usize);
+
+    Ok(())
+}
+
+pub fn cycle_down(stack: &mut Vec<u32>, size: usize, offset: u32) -> Result<(), &'static str> {
+    if size > stack.len() {
+        return Err("Given amount of elements to shift is larger than the stack");
+    }
+
+    let length = stack.len();
+
+    stack[(length - size)..].rotate_left(offset as usize);
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -56,5 +80,25 @@ mod tests {
 
         let a = 0;
         assert_eq!(invert(a), 1);
+    }
+
+    #[test]
+    fn cycle_test() {
+        let mut stack = vec![1, 2, 3, 4, 5];
+
+        cycle_up(&mut stack, 3, 1);
+        assert_eq!(stack, vec![1, 2, 5, 3, 4]);
+
+        cycle_down(&mut stack, 4, 1);
+        assert_eq!(stack, vec![1, 5, 3, 4, 2]);
+
+        assert_eq!(
+            cycle_up(&mut stack, 6, 1),
+            Err("Given amount of elements to shift is larger than the stack")
+        );
+        assert_eq!(
+            cycle_down(&mut stack, 6, 1),
+            Err("Given amount of elements to shift is larger than the stack")
+        );
     }
 }

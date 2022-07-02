@@ -25,4 +25,6 @@ pub enum BottomSet {
     Equal,
     Greater,
     Less,
+    CycleUp,
+    CycleDown,
 }

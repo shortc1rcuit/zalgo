@@ -50,14 +50,17 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y, push X*Y.                |
 | `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y/X (rounded down). |
 | `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y%X.                |
-| `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y, push X∧Y.                |
-| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push X∨Y.                |
-| `◌͓`       | `U+0353`          | Pops a value off the stack X and inverts the significant bits (NOT gate). |
-| `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y << X.             |
-| `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y >> X.             |
-| `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y. Push 1 if X == Y or 0 otherwise. |
-| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y. Push 1 if Y > X or 0 otherwise. |
-| `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y. Push 1 if Y < X or 0 otherwise. |
+| `◌̭`       | `U+032D`          | Pops a value off the stack X and another Y, push X∧Y.                |
+| `◌̬`       | `U+032C`          | Pops a value off the stack X and another Y, push X∨Y.                |
+| `◌͉`       | `U+0349`          | Pops a value off the stack X and inverts the significant bits (NOT gate). |
+| `◌̜`       | `U+031C`          | Pops a value off the stack X and another Y, push Y << X.             |
+| `◌̹`       | `U+0339`          | Pops a value off the stack X and another Y, push Y >> X.             |
+| `◌̳`       | `U+0333`          | Pops a value off the stack X and another Y. Push 1 if X == Y or 0 otherwise. |
+| `◌͕`       | `U+0355`          | Pops a value off the stack X and another Y. Push 1 if Y > X or 0 otherwise. |
+| `◌͔`       | `U+0354`          | Pops a value off the stack X and another Y. Push 1 if Y < X or 0 otherwise. |
+| `◌̙`       | `U+0319`          | Pops a value off the stack X and another Y. Cycle the top Y elements of the stack up by X |
+| `◌̘`       | `U+0318`          | Pops a value off the stack X and another Y. Cycle the top Y elements of the stack down by X |
+
 
 ## Running the interpreter
 

@@ -24,8 +24,6 @@ Clusters are executed in reading order.
 
 ## Zalgo instructions
 
-(Zalgo is unfinished and more instructions will be added)
-
 ### Top side instructions
 
 | Character | Unicode Number    | Description                        |

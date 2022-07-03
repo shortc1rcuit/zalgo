@@ -86,8 +86,12 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     let if_check = pop_stack(&mut stack)?;
 
                     if if_check == 0 {
+                        x += 2;
+                    } else {
                         x += 1;
                     }
+
+                    continue 'over_code;
                 }
                 BottomSet::Print => {
                     //Pop top of stack and print

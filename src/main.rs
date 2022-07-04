@@ -118,6 +118,11 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                         //A null byte is added to the end so that it is possible to tell when the
                         //string ends
                         input.pop();
+
+                        if input.chars().last() == Some('\r') {
+                            input.pop();
+                        }
+
                         input = format!("{}{}", input, "\0")
                     }
 

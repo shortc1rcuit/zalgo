@@ -1,6 +1,7 @@
 # Zalgo
 
-An esolang inspired by [Zalgo text](https://en.wikipedia.org/wiki/Zalgo_text)
+An esolang inspired by [Zalgo text](https://en.wikipedia.org/wiki/Zalgo_text)  
+The esolangs.org page can be found [here](https://esolangs.org/wiki/Zalgo)
 
 ## Coding in Zalgo
 

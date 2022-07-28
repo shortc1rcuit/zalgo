@@ -86,10 +86,10 @@ mod tests {
     fn cycle_test() {
         let mut stack = vec![1, 2, 3, 4, 5];
 
-        cycle_up(&mut stack, 3, 1);
+        _ = cycle_up(&mut stack, 3, 1);
         assert_eq!(stack, vec![1, 2, 5, 3, 4]);
 
-        cycle_down(&mut stack, 4, 1);
+        _ = cycle_down(&mut stack, 4, 1);
         assert_eq!(stack, vec![1, 5, 3, 4, 2]);
 
         assert_eq!(

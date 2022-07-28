@@ -119,7 +119,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                         //string ends
                         input.pop();
 
-                        if input.chars().last() == Some('\r') {
+                        if input.ends_with('\r') {
                             input.pop();
                         }
 

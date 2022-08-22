@@ -53,6 +53,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
     //Value used to build a number before it's pushed to the stack
     let mut pre_push = 0;
+    let mut negation = 1;
 
     let mut input = String::new();
 
@@ -67,9 +68,15 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 TopSet::Number(a) => {
                     pre_push = (pre_push << 4) + a;
                 }
+                //Used to push negative values
+                TopSet::Negate => {
+                    if pre_push == 0 {
+                        negation *= -1;
+                    }
+                }
                 //Push to stack
                 TopSet::Push => {
-                    stack.push(pre_push);
+                    stack.push(pre_push * negation);
                     pre_push = 0;
                 }
                 //Pop top off stack

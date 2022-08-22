@@ -31,6 +31,7 @@ Clusters are executed in reading order.
 | Character | Unicode Number    | Description                        |
 |:---------:|:-----------------:|------------------------------------|
 | `◌̀ - ◌̏`   | `U+0300 - U+030F` | Represents the hex digits `0 - F`. |
+| `◌͆`       | `U+0346`          | Put at the start of the number for it's negative form |
 | `◌̐`       | `U+0310`          | Pushes the hex value to the stack. If no hex value is given, it will push 0 |
 | `◌̑`       | `U+0311`          | Pops the top value off the stack.  |
 

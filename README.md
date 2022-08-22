@@ -59,8 +59,7 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | `◌̳`       | `U+0333`          | Pops a value off the stack X and another Y. Push 1 if X == Y or 0 otherwise. |
 | `◌͕`       | `U+0355`          | Pops a value off the stack X and another Y. Push 1 if Y > X or 0 otherwise. |
 | `◌͔`       | `U+0354`          | Pops a value off the stack X and another Y. Push 1 if Y < X or 0 otherwise. |
-| `◌̙`       | `U+0319`          | Pops a value off the stack X and another Y. Cycle the top Y elements of the stack up by X |
-| `◌̘`       | `U+0318`          | Pops a value off the stack X and another Y. Cycle the top Y elements of the stack down by X |
+| `◌̙`       | `U+0319`          | Pops a value off the stack X and another Y. Cycle the top Y elements of the stack by X. (Positive means cycle up, negative means cycle down)|
 
 
 ## Running the interpreter

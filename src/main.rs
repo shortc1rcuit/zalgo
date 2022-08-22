@@ -59,10 +59,10 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
     //Index into vec
     //I need to jump back and forth in the vec so I can't just iter
-    let mut x = 0;
+    let mut x: i32 = 0;
 
-    'over_code: while x < lexed_code.len() {
-        for value in &lexed_code[x].top {
+    'over_code: while (x as usize) < lexed_code.len() {
+        for value in &lexed_code[x as usize].top {
             match *value {
                 //0 - F value
                 TopSet::Number(a) => {
@@ -85,7 +85,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 }
             }
         }
-        for value in &lexed_code[x].bottom {
+        for value in &lexed_code[x as usize].bottom {
             match *value {
                 //Pop the top of the stack
                 //If 0, skip the next cluster
@@ -149,7 +149,12 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 BottomSet::Jump => {
                     let position = pop_stack(&mut stack)?;
 
-                    x = position as usize;
+                    x += position;
+                    
+                    if x < 0 {
+                        return Err("Jumped to position before the program");
+                    }
+
                     continue 'over_code;
                 }
                 BottomSet::Add => {
@@ -247,17 +252,11 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                         }
                     });
                 }
-                BottomSet::CycleUp => {
+                BottomSet::Cycle => {
                     let a = pop_stack(&mut stack)?;
                     let b = pop_stack(&mut stack)?;
 
-                    cycle_up(&mut stack, b, a)?;
-                }
-                BottomSet::CycleDown => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    cycle_down(&mut stack, b, a)?;
+                    cycle(&mut stack, b, a)?;
                 }
             }
         }

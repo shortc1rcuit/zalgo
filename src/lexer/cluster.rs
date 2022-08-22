@@ -14,7 +14,7 @@ impl Cluster {
 
         for c in unclustered {
             if c <= 0xF {
-                top.push(TopSet::Number(c));
+                top.push(TopSet::Number(c as i32));
             } else if c == 0x10 {
                 top.push(TopSet::Push);
             } else if c == 0x11 {

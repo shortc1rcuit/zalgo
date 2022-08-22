@@ -11,7 +11,8 @@ A program in Zalgo is made up of clusters. A cluster is made up of 3 parts:
 	+ The character shouldn't be a whitespace character or combining diacritic.
 	+ If it is then the interpreter will interpret the cluster as part of the previous cluster if there is one.
 	+ If there isn't one then the cluster will be ignored.
-	+ There values of the centre characters aren't used in the program so feel free to make them whatever you want!
+	+ A centre character with no diacritics is ignored
+	+ The values of the centre characters aren't used in the program so feel free to make them whatever you want!
 2. A set of top diacritics
 	+ This is any character in the Combining Diacritical Marks code block in Unicode that appears above the base character.
 	+ Diacritics are added going from the centre outwards.
@@ -40,12 +41,12 @@ The interpreter treats hex digits that are next to each other as one single hex 
 | Character | Unicode Number    | Description                                                          |
 |:---------:|:-----------------:|----------------------------------------------------------------------|
 | `◌̥`       | `U+0325`          | Pops a value off the stack, if it's 0, skip the next cluster.        |
-| `◌̝`       | `U+031D`          | Pops a value off the stack and prints its Unicode value.             |
+| `◌̝`       | `U+031D`          | Pops a value off the stack and prints its Unicode character.             |
 | `◌̞`       | `U+031E`          | Input works with a buffer. The command takes the first character from the buffer and pushes it to the stack. If the buffer is empty, the user is prompted to input something to set the buffer to before the process continues. All inputs have a null byte added to the end. |
 | `◌͈`       | `U+0348`          | Duplicates the top value of the stack.                               |
 | `◌͍`       | `U+034D`          | Pops a value off the stack and jumps to the nth cluster (0 indexed). Any remaining instructions in the current cluster will be ignored. |
 | `◌̟`       | `U+031F`          | Pops a value off the stack X and another Y, push X+Y.                |
-| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push the absolute difference of X and Y. |
+| `◌̠`       | `U+0320`          | Pops a value off the stack X and another Y, push X-Y. |
 | `◌͓`       | `U+0353`          | Pops a value off the stack X and another Y, push X*Y.                |
 | `◌̡`       | `U+0321`          | Pops a value off the stack X and another Y, push Y/X (rounded down). |
 | `◌̢`       | `U+0322`          | Pops a value off the stack X and another Y, push Y%X.                |

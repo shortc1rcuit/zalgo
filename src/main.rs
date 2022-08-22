@@ -49,7 +49,7 @@ fn get_filename(mut args: env::Args) -> Result<String, &'static str> {
 }
 
 fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
-    let mut stack: Vec<u32> = Vec::new();
+    let mut stack: Vec<i32> = Vec::new();
 
     //Value used to build a number before it's pushed to the stack
     let mut pre_push = 0;
@@ -129,7 +129,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     let mut input_chars = input.chars();
                     //This is ok as the previous if statement
                     //makes sure the string has something in it
-                    stack.push(input_chars.next().unwrap() as u32);
+                    stack.push(input_chars.next().unwrap() as i32);
                     input = input_chars.collect();
                 }
                 BottomSet::Dup => {
@@ -155,11 +155,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     let a = pop_stack(&mut stack)?;
                     let b = pop_stack(&mut stack)?;
 
-                    if a > b {
-                        stack.push(a - b);
-                    } else {
-                        stack.push(b - a);
-                    }
+                    stack.push(b - a);
                 }
                 BottomSet::Mul => {
                     let a = pop_stack(&mut stack)?;
@@ -194,7 +190,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 BottomSet::Not => {
                     let a = pop_stack(&mut stack)?;
 
-                    stack.push(invert(a));
+                    stack.push(invert(a)?);
                 }
                 BottomSet::Bsl => {
                     let a = pop_stack(&mut stack)?;
@@ -248,13 +244,13 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                     let a = pop_stack(&mut stack)?;
                     let b = pop_stack(&mut stack)?;
 
-                    cycle_up(&mut stack, b as usize, a)?;
+                    cycle_up(&mut stack, b, a)?;
                 }
                 BottomSet::CycleDown => {
                     let a = pop_stack(&mut stack)?;
                     let b = pop_stack(&mut stack)?;
 
-                    cycle_down(&mut stack, b as usize, a)?;
+                    cycle_down(&mut stack, b, a)?;
                 }
             }
         }

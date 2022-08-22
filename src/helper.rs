@@ -43,7 +43,7 @@ pub fn cycle(stack: &mut Vec<i32>, size: i32, offset: i32) -> Result<(), &'stati
     if offset >= 0 {
         stack[(length - size as usize)..].rotate_right(offset as usize);
     } else {
-        stack[(length - size as usize)..].rotate_left((offset * -1) as usize);
+        stack[(length - size as usize)..].rotate_left((-offset) as usize);
     }
     
 

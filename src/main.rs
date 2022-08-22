@@ -78,6 +78,7 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
                 TopSet::Push => {
                     stack.push(pre_push * negation);
                     pre_push = 0;
+                    negation = 1;
                 }
                 //Pop top off stack
                 TopSet::Pop => {

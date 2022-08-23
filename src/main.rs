@@ -1,16 +1,11 @@
-use std::{
-    env, fs,
-    io::{self, Write},
-    process,
-};
+use std::{env, fs, process};
 
 pub mod lexer;
 use cluster::*;
 use lexer::*;
-use token::*;
 
-pub mod helper;
-use helper::*;
+pub mod interpreter;
+use interpreter::*;
 
 fn main() {
     let filename = get_filename(env::args()).unwrap_or_else(|err| {
@@ -63,209 +58,20 @@ fn interpret_code(lexed_code: Vec<Cluster>) -> Result<(), &'static str> {
 
     'over_code: while (x as usize) < lexed_code.len() {
         for value in &lexed_code[x as usize].top {
-            match *value {
-                //0 - F value
-                TopSet::Number(a) => {
-                    pre_push = (pre_push << 4) + a;
-                }
-                //Used to push negative values
-                TopSet::Negate => {
-                    if pre_push == 0 {
-                        negation *= -1;
-                    }
-                }
-                //Push to stack
-                TopSet::Push => {
-                    stack.push(pre_push * negation);
-                    pre_push = 0;
-                    negation = 1;
-                }
-                //Pop top off stack
-                TopSet::Pop => {
-                    stack.pop();
-                }
-            }
+            run_top(value, &mut stack, &mut pre_push, &mut negation);
         }
         for value in &lexed_code[x as usize].bottom {
-            match *value {
-                //Pop the top of the stack
-                //If 0, skip the next cluster
-                BottomSet::If => {
-                    let if_check = pop_stack(&mut stack)?;
+            let jump = run_bottom(value, &mut stack, &mut input, &mut x)?;
 
-                    if if_check == 0 {
-                        x += 2;
-                    } else {
-                        x += 1;
-                    }
-
-                    continue 'over_code;
-                }
-                BottomSet::Print => {
-                    //Pop top of stack and print
-                    let print_char = pop_stack(&mut stack)?;
-
-                    let print_char = match char::from_u32(print_char as u32) {
-                        Some(x) => x,
-                        None => {
-                            return Err("Invalid char value!");
-                        }
-                    };
-
-                    print!("{}", print_char);
-                }
-                BottomSet::Input => {
-                    if input.is_empty() {
-                        io::stdout().flush().expect("Failed to flush buffer");
-
-                        io::stdin()
-                            .read_line(&mut input)
-                            .expect("Failed to read line");
-
-                        //The input will have a newline at the end, so it's removed
-                        //A null byte is added to the end so that it is possible to tell when the
-                        //string ends
-                        input.pop();
-
-                        if input.ends_with('\r') {
-                            input.pop();
-                        }
-
-                        input = format!("{}{}", input, "\0")
-                    }
-
-                    let mut input_chars = input.chars();
-                    //This is ok as the previous if statement
-                    //makes sure the string has something in it
-                    stack.push(input_chars.next().unwrap() as i32);
-                    input = input_chars.collect();
-                }
-                BottomSet::Dup => {
-                    //Duplicate top value of stack
-                    let single = pop_stack(&mut stack)?;
-
-                    stack.push(single);
-                    stack.push(single);
-                }
-                BottomSet::Jump => {
-                    let position = pop_stack(&mut stack)?;
-
-                    x += position;
-                    
-                    if x < 0 {
-                        return Err("Jumped to position before the program");
-                    }
-
-                    continue 'over_code;
-                }
-                BottomSet::Add => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(a + b);
-                }
-                BottomSet::Sub => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b - a);
-                }
-                BottomSet::Mul => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(a * b);
-                }
-                BottomSet::Div => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b / a);
-                }
-                BottomSet::Mod => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b % a);
-                }
-                BottomSet::And => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b & a);
-                }
-                BottomSet::Or => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b | a);
-                }
-                BottomSet::Not => {
-                    let a = pop_stack(&mut stack)?;
-
-                    stack.push(invert(a)?);
-                }
-                BottomSet::Bsl => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b << a);
-                }
-                BottomSet::Bsr => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push(b >> a);
-                }
-                BottomSet::Equal => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push({
-                        if a == b {
-                            1
-                        } else {
-                            0
-                        }
-                    });
-                }
-                BottomSet::Greater => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push({
-                        if b > a {
-                            1
-                        } else {
-                            0
-                        }
-                    });
-                }
-                BottomSet::Less => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    stack.push({
-                        if b < a {
-                            1
-                        } else {
-                            0
-                        }
-                    });
-                }
-                BottomSet::Cycle => {
-                    let a = pop_stack(&mut stack)?;
-                    let b = pop_stack(&mut stack)?;
-
-                    cycle(&mut stack, b, a)?;
-                }
+            if jump {
+                continue 'over_code;
             }
         }
 
         x += 1;
     }
 
-    //This will add a % character to the end of the output if I don't do this
+    //The program will add a % character to the end of the output if I don't do this
     println!();
 
     Ok(())

@@ -8,7 +8,7 @@ pub struct Cluster {
 }
 
 impl Cluster {
-    pub fn new(unclustered: Vec<u32>) -> Cluster {
+    pub fn new(unclustered: Vec<u32>) -> Self {
         let mut top = Vec::new();
         let mut bottom = Vec::new();
 
